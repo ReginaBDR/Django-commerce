@@ -1,0 +1,26 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-6 mx-auto">
+                <h2 class="text-center mb-4">Register</h2>
+                {% include 'auctions/messages.html' %}
+                <form class="form-group" action="{% url 'register' %}" method="post">
+                    {% csrf_token %}
+                    <label>User Name: Maximum 150 characters, only letters, numbers, and @/./+/-/_ </label>
+                    {{ form.username }}
+                    <label>Email:</label>
+                    {{ form.email }}
+                    <label>Password:</label>
+                    {{ form.password }}
+                    <label>Confirm Password:</label>
+                    {{ form.confirm_password }}
+                    <input class="btn btn-info btn-block my-4" type="submit" value="Register">
+                </form>
+                Already have an account? <a href="{% url 'login' %}">Login here.</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

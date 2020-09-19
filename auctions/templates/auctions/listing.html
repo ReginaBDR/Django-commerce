@@ -1,0 +1,38 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="row">
+        {% include 'auctions/messages.html' %}
+        <div class="col-md-4 col-lg-8">
+            {% include 'auctions/card_listing.html' %}
+            {% if comments %}
+            <div class="card mb-4 shadow rounded">
+                <div class="card-body">
+                    <h4 class="card-text">Users Comments</h4>
+                </div>
+                <div class="card-text">
+                    <ul class="list-group list-group-flush">
+                        {% for comment in comments %}
+                        <li class="list-group-item my-2">
+                            <img style="height: 32px" src="/static/auctions/user-icon.png" />
+                            {{ comment.owner }} 
+                            <small class="text-muted">wrote on {{ comment.comment_date |date }}
+                                in {{ listing.get_category_display }}</small>
+                            <p><strong>{{ comment.headline }} </strong>- {{ comment.description }}</p>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-lg-4">
+            {% include 'auctions/card_bid.html' %}
+            {% if listing.status != listing.CLOSED %}
+            {% include 'auctions/card_comment.html' %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

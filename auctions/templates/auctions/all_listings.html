@@ -1,0 +1,37 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+{% include 'auctions/messages.html' %}
+    <div class="container">
+        <div class="row my-4">
+            <div class="col-10 text-center">
+                <h2 class="display-4">{{ category_heading }}</h2>
+            </div>
+            <div class="col-2 text-right">
+                {% if '/watchlist' not in request.path %}
+                <div class="dropdown">
+                    <button class="btn btn-info dropdown-toggle my-3" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category Filter
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{% url 'all_listings' %} ">All Listings</a>
+                        {% for key, value in category %}
+                        <a class="dropdown-item" href="{% url 'category_sort' key %} ">{{ value }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="row my-4 mx-auto">
+                {% for listing in listings %}
+                <div class="col-md-4">
+                    {% include 'auctions/card_listing.html' %}
+                </div>
+                {% empty %}
+                <div class="text-center">
+                    <h4 class="h2">No listings found in this category.</h4>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endblock %}

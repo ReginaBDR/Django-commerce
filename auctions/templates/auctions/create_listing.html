@@ -1,0 +1,44 @@
+{% extends "auctions/layout.html" %}
+{% block body %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-8 mx-auto">
+            {% include 'auctions/messages.html' %}
+            <h2 class="pb-3 h1 text-center">Create a new Listing</h2>
+            <form action="{% url 'create_listing' %}" method="post" autocomplete="off">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Category</label>
+                    </div>
+                    {{ form.category }}
+                </div>
+                <small class="text-muted"><strong>Headline (required), Maximum 64 characters</strong></small>
+                <div class="input-group mb-3">
+                    {{ form.headline }}
+                </div>
+                <small class="text-muted"><strong>Description (required), Maximum 1000 characters</strong></small>
+                <div class="input-group mb-3">
+                    {{ form.description }}
+                </div>
+                <small class="text-muted">Image URL</small>
+                <div class="input-group mb-3" required>
+                    {{ form.image_url }}
+                </div>
+                <small class="text-muted"><strong>Minimum bid (required), greater than 0 but less than
+                        $999,999</strong></small>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">$</span>
+                    </div>
+                    {{ form.min_bid }}
+                    <div class="input-group-append">
+                        <span class="input-group-text">.00</span>
+                    </div>
+                </div>
+                <input class="btn btn-lg btn-info btn-block mt-2" type="submit" value="Create">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,77 @@
+<div class="card">
+    <div class="card-header">
+        {% if user.id == listing.owner.id and listing.status != listing.CLOSED %}
+        <form method="post" action="{% url 'close_listing' %}">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="col">
+                    <h4>Bid State</h4>
+                </div>
+                <div class="col text-right">
+                    <button class="btn btn-warning btn-sm" type="submit">
+                        <strong>Finish Auction</strong>
+                    </button>
+                </div>
+            </div>
+            <input type="hidden" name="listing_id" value="{{ listing.id }}" />
+        </form>
+        {% else %}
+        <div class="col">
+            <h4>Summary</h4>
+        </div>
+        {% endif %}
+    </div>
+    {% if listing.status == listing.CLOSED %}
+    <ul class="list-group list-group-flush">
+        {% if listing.top_bid.owner.id == request.user.id %}
+        <li class="list-group-item">
+            You won this auction!! The product is yours <strong>{{ listing.top_bid.owner }}</strong>
+        </li>
+        {% endif %}
+        <li class="list-group-item"><strong>CLOSED</strong></li>
+        <li class="list-group-item">
+            <span class="text-success">Final Price: ${{ listing.top_bid.bid|floatformat }}</span></li>
+    </ul>
+    {% else %}
+    <form method="post" action="{% url 'place_bid' %}">
+        {% csrf_token %}
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Current Price:
+                <span class="text-info">
+                    {% if listing.top_bid %}
+                    <b>${{ listing.top_bid.bid|floatformat }}</b> from {{ listing.top_bid.owner }}
+                    {% else %}
+                    There are no bids yeat.
+                    {% endif %}
+                </span>
+            </li>
+            <li class="list-group-item">
+                <small class="card-text">Base Price was: <b>${{ listing.min_bid|floatformat }}</b></small>
+            </li>
+            {% if user.is_authenticated %}
+            <li class="list-group-item">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">$</span>
+                    </div>
+                    {{ form.bid }}
+                    <input type="hidden" name="listing_id" value="{{ listing.id }}" />
+                </div>
+            </li>
+            <li class="list-group-item text-center">
+                <button type="submit" class="btn btn-info">
+                    <strong>Make Your Bid</strong>
+                </button>
+            </li>
+            {% else %}
+            <li class="list-group-item text-right">
+                <strong>Please <a href="{% url 'login' %}">login</a> to Bid.</strong>
+                <button type="submit" class="btn btn-secondary" disabled>
+                    <strong>Make Your Bid</strong>
+                </button>
+            </li>
+            {% endif %}
+        </ul>
+    </form>
+    {% endif %}
+</div>
